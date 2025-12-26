@@ -48,7 +48,7 @@ vim config.json
 Requires C++17 compatible compiler (GCC 8+, Clang 7+, Apple Clang 10+).
 
 ```bash
-git clone https://github.com/1etu/signpost.git
+git clone https://github.com/yourname/signpost.git
 cd signpost
 make
 ```
