@@ -44,8 +44,11 @@ jobs:
 
       - name: Prepare binaries
         run: |
-          mv signpost-linux-x64/signpost signpost-linux-x64
-          mv signpost-macos-arm64/signpost signpost-macos-arm64
+          mv signpost-linux-x64/signpost ./signpost-linux-x64-bin
+          mv signpost-macos-arm64/signpost ./signpost-macos-arm64-bin
+          rm -rf signpost-linux-x64 signpost-macos-arm64
+          mv signpost-linux-x64-bin signpost-linux-x64
+          mv signpost-macos-arm64-bin signpost-macos-arm64
           chmod +x signpost-linux-x64 signpost-macos-arm64
 
       - name: Create Release
