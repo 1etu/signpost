@@ -1,0 +1,71 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux-x64
+            cc: gcc
+            cxx: g++
+          - os: macos-latest
+            name: macos-arm64
+            cc: clang
+            cxx: clang++
+          - os: macos-13
+            name: macos-x64
+            cc: clang
+            cxx: clang++
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          make CXX=${{ matrix.cxx }}
+          strip signpost || true
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          cp signpost dist/signpost-${{ matrix.name }}
+          cp config.json dist/
+          cp README.md dist/
+          cp LICENSE dist/
+          tar -czvf signpost-${{ matrix.name }}.tar.gz -C dist .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: signpost-${{ matrix.name }}
+          path: signpost-${{ matrix.name }}.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/*.tar.gz
+          generate_release_notes: true

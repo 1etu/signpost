@@ -1,0 +1,16 @@
+{
+    "host": "0.0.0.0",
+    "port": 25565,
+
+    "motd": "§7§oPlease connect via §6§oplay.example.net",
+    "motd_outdated": "§7§oYour client is §c§ooutdated",
+    "min_protocol": 765,
+
+    "kick_message": "§7§oPlease connect via §6§oplay.example.net",
+
+    "version_name": "Example Network",
+    "max_players": 0,
+    "online_players": 0,
+
+    "favicon": "server-icon.png"
+}
